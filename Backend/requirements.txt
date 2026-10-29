@@ -1,0 +1,10 @@
+fastapi==0.144.0
+uvicorn==0.40.0
+joblib==1.5.3
+pandas==3.0.3
+pydantic==2.13.4
+python-dotenv==1.2.1
+scikit-learn==1.7.2
+PyJWT==2.10.1
+python-multipart==0.0.20
+mysql-connector-python==26.7.0

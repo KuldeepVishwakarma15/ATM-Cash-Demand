@@ -1,0 +1,36 @@
+{
+  "family": "cashcast-api",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::<ACCOUNT_ID>:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "cashcast-api",
+      "image": "<ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/cashcast-api:latest",
+      "essential": true,
+      "portMappings": [{ "containerPort": 8000, "protocol": "tcp" }],
+      "environment": [
+        { "name": "MYSQL_HOST", "value": "<RDS_MYSQL_ENDPOINT>" },
+        { "name": "MYSQL_PORT", "value": "3306" },
+        { "name": "MYSQL_DATABASE", "value": "cashcast" },
+        { "name": "CORS_ORIGINS", "value": "https://<YOUR_DOMAIN>" }
+      ],
+      "secrets": [
+        { "name": "JWT_SECRET", "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:cashcast/jwt-secret" },
+        { "name": "MYSQL_USER", "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:cashcast/db:username::" },
+        { "name": "MYSQL_PASSWORD", "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:cashcast/db:password::" },
+        { "name": "CASHCAST_DEMO_PASSWORD", "valueFrom": "arn:aws:secretsmanager:<REGION>:<ACCOUNT_ID>:secret:cashcast/demo-password" }
+      ],
+      "healthCheck": {
+        "command": ["CMD-SHELL", "python -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=5).status == 200 else 1)\""],
+        "interval": 30, "timeout": 6, "retries": 3, "startPeriod": 40
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": { "awslogs-group": "/ecs/cashcast-api", "awslogs-region": "<REGION>", "awslogs-stream-prefix": "api" }
+      }
+    }
+  ]
+}

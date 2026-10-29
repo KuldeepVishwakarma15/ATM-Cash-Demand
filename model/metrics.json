@@ -1,0 +1,35 @@
+{
+  "test_start": "2025-05-01",
+  "test_rows": 1140,
+  "mape_percent": 8.154047462906009,
+  "accuracy_percent": 91.84595253709399,
+  "mae": 48498.35521121406,
+  "r2": 0.8210328866230231,
+  "baseline_mape_percent": 13.90227054945521,
+  "atm_accuracy": {
+    "ATM001": 91.80768822911779,
+    "ATM002": 91.50826730941411,
+    "ATM003": 90.94899717328545,
+    "ATM004": 91.93971113430796,
+    "ATM005": 92.04057806297395,
+    "ATM006": 92.8131025877643,
+    "ATM007": 92.17666016809784,
+    "ATM008": 91.67335302630741,
+    "ATM009": 90.90274037001657,
+    "ATM010": 92.64842730965456
+  },
+  "model_trained": true,
+  "backtest": {
+    "simulation": true,
+    "method": "day-by-day replay per ATM; balances carry forward after simulated refills, withdrawals, and recorded deposits",
+    "fixed_threshold": {
+      "cashouts": 26,
+      "refill_trips": 302
+    },
+    "forecast_threshold": {
+      "cashouts": 0,
+      "refill_trips": 346
+    },
+    "cashout_reduction_percent": 100.0
+  }
+}

@@ -1,0 +1,14 @@
+.git
+.venv
+venv
+__pycache__
+*.py[cod]
+.pytest_cache
+.env
+.env.*
+!.env.example
+Frontend
+Notebook
+Backend/tests
+model/tests
+model/reports

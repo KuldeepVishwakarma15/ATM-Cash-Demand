@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.venv/
+.venv*/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+Frontend/node_modules/
+Frontend/dist/
+data/*.sqlite
+data/*.sqlite3
+data/*.db
+# Re-created by `python model/train.py` (and inside the Docker image)
+model/*.joblib

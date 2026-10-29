@@ -1,0 +1,30 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env: { MYSQL_DATABASE: cashcast, MYSQL_USER: cashcast, MYSQL_PASSWORD: ci-password, MYSQL_ROOT_PASSWORD: ci-root }
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -pci-root" --health-interval=5s --health-timeout=5s --health-retries=30
+    env: { MYSQL_HOST: 127.0.0.1, MYSQL_PASSWORD: ci-password, JWT_SECRET: ci-secret-ci-secret-ci-secret-ci-secret }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip, cache-dependency-path: Backend/requirements-dev.txt }
+      - run: pip install -r Backend/requirements-dev.txt
+      - run: python model/train.py
+      - run: python -m pytest -q
+  frontend:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: Frontend } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: Frontend/package-lock.json }
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
